@@ -1,5 +1,4 @@
-To combine everything into a cohesive README for your GitHub project, including the full HTML code snippet you provided, I'll create a comprehensive README template. This template will cover an overview of your project, how to set it up, and how to use it, and will include the HTML code in a suitable section for clarity and direct implementation by users or contributors.
-
+Eng. Mohamed Hekal
 ---
 
 # Equation Display
