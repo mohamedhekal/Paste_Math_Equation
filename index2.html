@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Equation Display</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.0/es5/tex-mml-chtml.js" integrity="sha384-8reGmBkxZlKz9/WEHlK7YMh3x5Vz1M7hqLwrv6UQ7xU5CgJ4MZhKy7FJ2nD4jKQe" crossorigin="anonymous"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+
+<input type="text" id="equation-input" placeholder="Enter your equation here" />
+<button onclick="displayEquation()">Display Equation</button>
+
+<div id="math-content"></div>
+
+<script>
+function convertToLaTeX(equation) {
+    // Escape special characters
+    equation = equation.replace(/([#$%&~_^{}])/g, '\\$1');
+
+    // Replace square root, handling nested expressions
+    equation = equation.replace(/√\((.*?)\)/g, "\\sqrt{$1}");
+    equation = equation.replace(/√([^\s]+)/g, "\\sqrt{$1}");
+
+    // Handle fractions more generally, considering complex expressions
+    equation = equation.replace(/(\S+)\/(\S+)/g, "\\frac{$1}{$2}");
+
+    // Replace powers, ensuring correct handling of complex expressions
+    equation = equation.replace(/\^(.*?)\b/g, "^{$1}");
+ 
+    // Replace trigonometric functions
+    equation = equation
+        .replace(/\bsin\b/g, "\\sin ")
+        .replace(/\bcos\b/g, "\\cos ")
+        .replace(/\btan\b/g, "\\tan ")
+        .replace(/\bsec\b/g, "\\sec ")
+        .replace(/\bcsc\b/g, "\\csc ")
+        .replace(/\bcot\b/g, "\\cot ");
+
+        
+    // Handle logarithms
+    equation = equation
+        .replace(/\blog\b/g, "\\log ")
+        .replace(/\bln\b/g, "\\ln ");
+
+    // Handle plus/minus
+    equation = equation.replace(/±/g, "\\pm ");
+
+    // Handle inequalities
+    equation = equation
+        .replace(/≥/g, "\\geq ")
+        .replace(/≤/g, "\\leq ")
+        .replace(/>/g, "\\gt ")
+        .replace(/</g, "\\lt ");
+
+    // Add LaTeX equation delimiters
+    equation = `$$${equation}$$`;
+
+    return equation;
+}
+
+function displayEquation() {
+    const userInput = document.getElementById("equation-input").value;
+    const latexEquation = convertToLaTeX(userInput);
+
+    // Set the innerHTML of the math-content div to the LaTeX equation
+    document.getElementById("math-content").innerHTML = latexEquation;
+
+    // Ask MathJax to typeset the new content
+    MathJax.typesetPromise().then(() => {
+        console.log('MathJax equations have been rendered.');
+    });
+}
+</script>
+
+</body>
+</html>
